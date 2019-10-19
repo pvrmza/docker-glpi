@@ -12,12 +12,13 @@ RUN apt update && apt -y dist-upgrade \
 #
 COPY files/foreground.sh /etc/apache2/foreground.sh
 COPY files/glpicron /etc/cron.d/glpicron
-COPY files/apache-glpi.conf /etc/apache2/conf-available/apache-glpi.conf
+COPY files/apache-glpi.conf /etc/apache2/conf-available/zz_apache-glpi.conf
+COPY files/glpi-php.ini /etc/php/7.2/apache2/conf.d/glpi-php.ini
 #
 RUN cd /tmp && wget https://github.com/glpi-project/glpi/releases/download/9.4.4/glpi-9.4.4.tgz && \
 	tar -zxvf glpi-9.4.4.tgz && mv /tmp/glpi /var/www/html/ && rm -rf /var/www/html/index.html && touch /var/www/html/index.html && \
 	sed -ri 's!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g; s!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g;' /etc/apache2/sites-available/*.conf && \
-	a2enmod rewrite && a2enmod ssl && a2ensite default-ssl && a2enconf apache-glpi 
+	a2enmod rewrite && a2enmod ssl && a2ensite default-ssl && a2enconf zz_apache-glpi 
 #
 RUN echo -e "TLS_REQCERT\tnever" >> /etc/ldap/ldap.conf && chmod 0644 /etc/cron.d/glpicron && chmod +x /etc/apache2/foreground.sh
 
@@ -38,4 +39,3 @@ RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/list
 VOLUME ["/var/www/html/glpi/plugins", "/var/www/html/glpi/files" ]
 EXPOSE 80 443
 ENTRYPOINT ["/etc/apache2/foreground.sh"]
-

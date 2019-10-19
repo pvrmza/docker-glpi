@@ -7,7 +7,7 @@ services:
     container_name: mysql
     hostname: mysql
     volumes:
-      - /var/lib/mysql:/var/lib/mysql
+      - /opt/glpi/mysql:/var/lib/mysql
     env_file:
       - ./mysql.env
     restart: always
@@ -23,8 +23,8 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /opt/glpi/plugins:/var/www/html/glpi/plugins
-      - /opt/glpi/files:/var/www/html/glpi/files
+        #- /opt/glpi/plugins:/var/www/html/glpi/plugins
+        #- /opt/glpi/files:/var/www/html/glpi/files
     environment:
       - TIMEZONE=America/Argentina/Mendoza
     restart: always
