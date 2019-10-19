@@ -14,15 +14,17 @@ services:
 
 #GLPI Container
   glpi:
-    image: diouxx/glpi
+    image: pvrmza/docker-glpi
     container_name : glpi
     hostname: glpi
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /var/www/html/glpi/:/var/www/html/glpi
+      - /opt/glpi/plugins:/var/www/html/glpi/plugins
+      - /opt/glpi/files:/var/www/html/glpi/files
     environment:
-      - TIMEZONE=Europe/Brussels
+      - TIMEZONE=America/Argentina/Mendoza
     restart: always
