@@ -1,12 +1,25 @@
 #!/bin/bash
 
+
+DIRPLUGIN=/opt/glpi/plugins/
+DIRGLPI=/var/www/html/glpi/
+
 # check dir and permission
-echo "placeholder" > /var/www/html/glpi/plugins/placeholder
+mkdir -p $DIRGLPI/plugins
+echo "placeholder" > $DIRGLPI/plugins/placeholder
+
+test -d $DIRGLPI/plugins/behaviors || cd $DIRGLPI/plugins/ ; tar zxvf $DIRPLUGIN/glpi-behaviors-2.2.2.tar.gz  
+test -d $DIRGLPI/plugins/dashboard || cd $DIRGLPI/plugins/ ; unzip $DIRPLUGIN/GLPI-dashboard_plugin-0.9.8.zip  
+test -d $DIRGLPI/plugins/escalade ||  cd $DIRGLPI/plugins/ ; tar xjf $DIRPLUGIN/glpi-escalade-2.4.4.tar.bz2 
+test -d $DIRGLPI/plugins/fusioninventory ||  cd $DIRGLPI/plugins/ ; tar xjf $DIRPLUGIN/fusioninventory-9.4+1.1.tar.bz2
+test -d $DIRGLPI/plugins/mod ||  cd $DIRGLPI/plugins/ ; tar zxvf $DIRPLUGIN/1.5.1.tar.gz ; mv glpi-modifications-1.5.1 mod
+
+#
 for dir in _cache  _cron  _dumps  _graphs  _lock  _log  _pictures  _plugins  _rss  _sessions  _tmp  _uploads
 do
-	mkdir /var/www/html/glpi/files/$dir
+	mkdir -p /var/www/html/glpi/files/$dir
 done
-
+#
 chown -R www-data:www-data /var/www/html/glpi/{files,plugins}
 chmod 755 /var/www/html/glpi/{files,plugins}
 
