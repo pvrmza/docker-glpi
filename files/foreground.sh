@@ -20,9 +20,20 @@ do
 	mkdir -p /var/www/html/glpi/files/$dir
 done
 #
-chown -R www-data:www-data /var/www/html/glpi/{files,plugins}
-chmod 755 /var/www/html/glpi/{files,plugins}
+chown -R www-data:www-data /var/www/html/glpi/{files,plugins,css}
+chmod 755 /var/www/html/glpi/{files,plugins,css}
 
+if [ -z ${TIMEZONE+x} ]; then 
+   echo "TIMEZONE is unset"; 
+else 
+   echo "date.timezone = \"$TIMEZONE\"" > /etc/php/7.2/apache2/conf.d/timezone.ini;
+fi
+
+if [ -z ${GLPI_INSTALLED+x} ]; then 
+   echo "GLPI_INSTALLED is unset"; 
+else 
+   mv /var/www/html/glpi/install/install.php /var/www/html/glpi/install/install.php.old
+fi
 
 read pid cmd state ppid pgrp session tty_nr tpgid rest < /proc/self/stat
 trap "kill -TERM -$pgrp; exit" EXIT TERM KILL SIGKILL SIGTERM SIGQUIT
