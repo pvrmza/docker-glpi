@@ -20,7 +20,7 @@ RUN cd /tmp && wget https://github.com/glpi-project/glpi/releases/download/9.4.4
 	sed -ri 's!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g; s!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g;' /etc/apache2/sites-available/*.conf && \
 	a2enmod rewrite && a2enmod ssl && a2ensite default-ssl && a2enconf zz_apache-glpi 
 #
-RUN echo -e "TLS_REQCERT\tnever" >> /etc/ldap/ldap.conf && chmod 0644 /etc/cron.d/glpicron && chmod +x /etc/apache2/foreground.sh
+RUN echo "TLS_REQCERT\tnever" >> /etc/ldap/ldap.conf && chmod 0644 /etc/cron.d/glpicron && chmod +x /etc/apache2/foreground.sh
 
 # PLUGINS DOWNLOADS
 RUN plugins="https://forge.glpi-project.org/attachments/download/2296/glpi-behaviors-2.2.2.tar.gz \
