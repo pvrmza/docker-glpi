@@ -35,6 +35,6 @@ RUN plugins="https://forge.glpi-project.org/attachments/download/2296/glpi-behav
 RUN apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/lib/cache/* /var/lib/log/* /var/lib/apt/lists/*
 
 #Puertos y Volumenes
-VOLUME ["/var/www/html/glpi/plugins", "/var/www/html/glpi/files" ]
+VOLUME ["/var/www/html/glpi/plugins", "/var/www/html/glpi/files", "/var/www/html/glpi/css" ]
 EXPOSE 80 443
 ENTRYPOINT ["/etc/apache2/foreground.sh"]
