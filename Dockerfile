@@ -17,7 +17,7 @@ COPY files/glpi-php.ini /etc/php/7.2/apache2/conf.d/glpi-php.ini
 #
 RUN cd /tmp && wget https://github.com/glpi-project/glpi/releases/download/9.4.4/glpi-9.4.4.tgz && \
 	tar -zxvf glpi-9.4.4.tgz && mv /tmp/glpi /var/www/html/ && rm -rf /var/www/html/index.html && touch /var/www/html/index.html && \
-	sed -ri 's!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g; s!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g;' /etc/apache2/sites-available/*.conf && \
+	sed -ri 's!^(\s*CustomLog)\s+\S+!\1 /dev/stdout!g; s!^(\s*ErrorLog)\s+\S+!\1 /dev/stdout!g;' /etc/apache2/sites-available/*.conf && \
 	a2enmod rewrite && a2enmod ssl && a2ensite default-ssl && a2enconf zz_apache-glpi 
 #
 RUN echo "TLS_REQCERT\tnever" >> /etc/ldap/ldap.conf && chmod 0644 /etc/cron.d/glpicron && chmod +x /etc/apache2/foreground.sh
