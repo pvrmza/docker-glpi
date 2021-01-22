@@ -2,29 +2,39 @@ version: "3.2"
 
 services:
 #Mysql Container
-  mysql:
-    image: mysql:5.7.23
-    container_name: mysql
-    hostname: mysql
+  db:
+    image: mysql/mysql-server:5.7
+    restart: always
     volumes:
-      - /opt/glpi/mysql:/var/lib/mysql
+      - glpi-db:/var/lib/mysql
     env_file:
       - ./mysql.env
-    restart: always
 
 #GLPI Container
-  glpi:
-    image: pvrmza/docker-glpi
-    container_name : glpi
+  app:
+    #image: pvrmza/docker-glpi
+    image: docker-glpi:latest
+    restart: always
     hostname: glpi
+    links:
+      - db:db
+    depends_on:
+      - db
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /opt/glpi/plugins:/var/www/html/glpi/plugins
-      - /opt/glpi/files:/var/www/html/glpi/files
+      - glpi-plugins:/var/www/html/glpi/plugins
+      - glpi-files:/var/www/html/glpi/files
     environment:
       - TIMEZONE=America/Argentina/Mendoza
-    restart: always
+      - GLPI_DATABASE_HOST=db
+      - GLPI_DATABASE_USER=glpi
+      - GLPI_DATABASE_PASS=Cambiame
+      - GLPI_DATABASE_NAME=glpidb
+      - GLPI_INSTALLED=true
+
+volumes:
+        glpi-db:
+        glpi-plugins:
+        glpi-files:
